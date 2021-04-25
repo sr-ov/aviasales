@@ -9,6 +9,8 @@ const StyledSidebar = styled.aside`
 	border-radius: 5px;
 	padding: 20px 0;
 	transition: transform 0.1s linear;
+	position: sticky;
+	top: 10px;
 
 	${({ hide }) =>
 		hide &&
@@ -30,8 +32,8 @@ const Title = styled.h2`
 	margin-bottom: 20px;
 `
 
-const Sidebar = ({ sidebarRef, hide, style, ...props }) => (
-	<StyledSidebar style={style} hide={hide} ref={sidebarRef}>
+const Sidebar = ({ hide, style, ...props }) => (
+	<StyledSidebar style={style} hide={hide}>
 		<Title>Количество пересадок</Title>
 		<Stops {...props} />
 	</StyledSidebar>

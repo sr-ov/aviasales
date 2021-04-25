@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useRef, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useState } from 'react'
 import { createGlobalStyle } from 'styled-components'
 import { Container, Sidebar, Main, Logo, Error, Button, ModalStops, Spinner } from './components'
 
@@ -58,18 +58,17 @@ const App = () => {
 	const [error, setError] = useState(false)
 	const [isLoading, setLoading] = useState(false)
 	const [isOpen, setOpen] = useState(false)
-	const sidebarRef = useRef()
 
 	const changeChecked = (index) => {
 		setCheckboxes((prev) => {
 			const checkZero = prev.includes(0)
 			const checkEl = prev.includes(index)
 
-			if ((index === 0 && !checkZero) || (prev.length === 1 && checkEl)) {
+			if (index === 0 || (prev.length === 1 && checkEl)) {
 				return [0]
 			}
 
-			const copy = index > 0 && checkZero ? prev.slice(1) : prev.slice()
+			const copy = checkZero ? prev.slice(1) : prev.slice()
 
 			return checkEl ? copy.filter((el) => el !== index) : copy.concat(index)
 		})
@@ -99,28 +98,6 @@ const App = () => {
 			)
 		}
 	}, [checkboxes, initialTickets, sortBy, setFilteredByStops])
-
-	useEffect(() => {
-		if (!sidebarRef.current || window.innerWidth <= 700) {
-			return
-		}
-
-		const top = sidebarRef.current.getBoundingClientRect().top
-
-		window.addEventListener('scroll', () => {
-			if (~~window.scrollY > top) {
-				sidebarRef.current.style.cssText = `
-					min-width: 232px;
-					position: fixed;
-					top: 0;
-					transform: translateY(30px);
-					z-index: 100;
-				`
-			} else {
-				sidebarRef.current.style = ''
-			}
-		})
-	}, [])
 
 	useEffect(() => {
 		setLoading(true)
@@ -179,7 +156,7 @@ const App = () => {
 					}}
 				>
 					<div>
-						<Sidebar {...{ checkboxes, changeChecked, sidebarRef, hide: true }} />
+						<Sidebar {...{ checkboxes, changeChecked, hide: true }} />
 					</div>
 
 					<Main
